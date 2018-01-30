@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactChatDemo", "ReactChatDemo\ReactChatDemo.csproj", "{FDC04FCF-FD65-4C2F-B1D4-E6F786229ACC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDC04FCF-FD65-4C2F-B1D4-E6F786229ACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC04FCF-FD65-4C2F-B1D4-E6F786229ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC04FCF-FD65-4C2F-B1D4-E6F786229ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC04FCF-FD65-4C2F-B1D4-E6F786229ACC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B4793EC-E665-45D5-96FC-BDD3DC175D51}
+	EndGlobalSection
+EndGlobal
