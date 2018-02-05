@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { HubConnection, TransportType, ConsoleLogger, LogLevel } from '@aspnet/signalr-client';
 import 'isomorphic-fetch';
 
 interface FetchDataExampleState {
