@@ -19,6 +19,27 @@
     z-index: 1;
 }
 
+.panel-chat {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+    .panel-chat ul,
+    .panel-chat ul li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .panel-chat ul {
+        padding-bottom: 40px;
+    }
+
+.chat-button {
+    width: 50px !important;
+}
+
+
 @media (max-width: 767px) {
     /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
     body {
