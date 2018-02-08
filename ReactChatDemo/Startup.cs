@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ReactChatDemo.Hubs;
+using ReactChatDemo.Services;
+using ReactChatDemo.User;
 
 namespace ReactChatDemo
 {
@@ -23,6 +25,9 @@ namespace ReactChatDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSignalR();
+            services.AddSingleton<IUserTracker, UserTracker>();
+            services.AddSingleton<IChatService, ChatService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +48,11 @@ namespace ReactChatDemo
             }
 
             app.UseStaticFiles();
+            
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("chat");
+            });
 
             app.UseMvc(routes =>
             {

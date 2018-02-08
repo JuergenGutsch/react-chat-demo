@@ -1,24 +1,16 @@
-﻿import * as SignalR from '@aspnet/signalr-client';
-import 'isomorphic-fetch';
+﻿import 'isomorphic-fetch';
 
+import WebsocketService from './WebsocketService'
 
 export class UsersService {
-    private socketCallback: any;
+    private _userLoggedOn: any;
 
     constructor(socketCallback: any) {
-
-        this.socketCallback = socketCallback;
-
-        var transport = SignalR.TransportType.WebSockets;
-        let logger = new SignalR.ConsoleLogger(SignalR.LogLevel.Information);
-
-        // Connection erzeugen
-        var connection = new SignalR.HubConnection(`http://${document.location.host}/chat`,
-            { transport: transport, logging: logger });
-
+        this._userLoggedOn = socketCallback;
+        
         // Chat-Nachrichten vom Server empfangen
-        connection.on('UserLoggedOn', (id, name) => {
-            socketCallback({
+        WebsocketService.registerUserLoggedOn((id: number, name: string) => {
+            this._userLoggedOn({
                 id: id,
                 name: name
             })
@@ -33,7 +25,6 @@ export class UsersService {
                 fetchUsersCallback(data);
             });
     }
-
 }
 
 export interface User {

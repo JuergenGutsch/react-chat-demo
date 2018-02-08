@@ -1,29 +1,24 @@
-﻿import * as SignalR from '@aspnet/signalr-client';
-import 'isomorphic-fetch';
+﻿import 'isomorphic-fetch';
 
+import WebsocketService from './WebsocketService'
 
 export class ChatService {
-    private socketCallback: any;
+    private _messageAdded: any;
 
-    constructor(socketCallback: any) {
-
-        this.socketCallback = socketCallback;
-
-        var transport = SignalR.TransportType.WebSockets;
-        let logger = new SignalR.ConsoleLogger(SignalR.LogLevel.Information);
-
-        // Connection erzeugen
-        var connection = new SignalR.HubConnection(`http://${document.location.host}/chat`,
-            { transport: transport, logging: logger });
+    constructor(messageAdded: any) {
+        this._messageAdded = messageAdded;
 
         // Chat-Nachrichten vom Server empfangen
-        connection.on('NewMessage', (message: ChatMessage) => {
-            socketCallback(message);
+        WebsocketService.registerMessageAdded((message: ChatMessage) => {
+            this._messageAdded(message);
         });
     }
 
+    public addMessage(message: string) {
+        WebsocketService.sendMessage(message);
+    }
+
     public fetchInitialMessages(fetchInitialMessagesCallback: any) {
-        
         fetch('api/Chat/InitialMessages')
             .then(response => response.json() as Promise<ChatMessage[]>)
             .then(data => {

@@ -12,7 +12,7 @@ export class Chat extends React.Component<{}, ChatState> {
     msg: HTMLInputElement;
     panel: HTMLDivElement;
 
-    private chatService: ChatService = new ChatService(this.handleOnSocket);
+    private _chatService: ChatService;
 
     constructor() {
         super();
@@ -20,15 +20,18 @@ export class Chat extends React.Component<{}, ChatState> {
             messages: [],
             currentMessage: ''
         };
+        let that = this;
+        this._chatService = new ChatService((msg: ChatMessage) => {
+            this.handleOnSocket(that, msg);
+        })
 
         this.handleOnInitialMessagesFetched = this.handleOnInitialMessagesFetched.bind(this);
-        this.handleOnSocket = this.handleOnSocket.bind(this);
         this.handlePanelRef = this.handlePanelRef.bind(this);
         this.handleMessageRef = this.handleMessageRef.bind(this);
         this.handleMessageChange = this.handleMessageChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
-        this.chatService.fetchInitialMessages(this.handleOnInitialMessagesFetched);
+        this._chatService.fetchInitialMessages(this.handleOnInitialMessagesFetched);
     }
 
     public render() {
@@ -70,12 +73,15 @@ export class Chat extends React.Component<{}, ChatState> {
         this.scrollDown(this);
     }
 
-    handleOnSocket(message: ChatMessage) {
-        let messages = this.state.messages;
+    handleOnSocket(that: Chat, message: ChatMessage) {
+        let messages = that.state.messages;
         messages.push(message);
-        this.setState({
-            messages: messages
+        that.setState({
+            messages: messages,
+            currentMessage: ''
         });
+        that.scrollDown(that);
+        that.focusField(that);
     }
 
     handlePanelRef(div: HTMLDivElement) {
@@ -86,7 +92,9 @@ export class Chat extends React.Component<{}, ChatState> {
     }
 
     handleMessageChange(event: any) {
-        this.setState({ currentMessage: event.target.value });
+        this.setState({
+            currentMessage: event.target.value
+        });
     }
 
     onSubmit(event: any) {
@@ -99,22 +107,8 @@ export class Chat extends React.Component<{}, ChatState> {
         if (currentMessage.length === 0) {
             return;
         }
-        let id = that.state.messages.length + 1;
-        let date = new Date();
 
-        let messages = that.state.messages;
-        messages.push({
-            id: id,
-            date: date,
-            message: currentMessage,
-            sender: 'Juergen'
-        })
-        that.setState({
-            messages: messages,
-            currentMessage: ''
-        });
-        that.focusField(that);
-        that.scrollDown(that);
+        this._chatService.addMessage(currentMessage);        
     }
 
     private focusField(that: Chat) {
