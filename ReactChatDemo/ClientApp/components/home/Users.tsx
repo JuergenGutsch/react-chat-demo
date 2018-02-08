@@ -1,23 +1,24 @@
 import * as React from 'react';
 
+import { UsersService, User } from '../../services/UsersService';
+
 interface UsersState {
     users: User[];
 }
-interface User {
-    id: number;
-    name: string;
-}
 
 export class Users extends React.Component<{}, UsersState> {
+    private userService: UsersService = new UsersService(this.handleOnSocket);
+
     constructor() {
         super();
         this.state = {
-            users: [
-                { id: 1, name: 'juergen' },
-                { id: 3, name: 'marion' },
-                { id: 2, name: 'peter' },
-                { id: 4, name: 'mo' }]
+            users: []
         };
+
+        this.handleOnSocket = this.handleOnSocket.bind(this);
+        this.handleOnLogedOnUserFetched = this.handleOnLogedOnUserFetched.bind(this);
+
+        this.userService.fetchLogedOnUsers(this.handleOnLogedOnUserFetched);        
     }
 
     public render() {
@@ -32,5 +33,19 @@ export class Users extends React.Component<{}, UsersState> {
                 </ul>
             </div>
         </div>;
+    }
+
+    handleOnLogedOnUserFetched(users: User[]) {        
+        this.setState({
+            users: users
+        });
+    }
+
+    handleOnSocket(user: User) {
+        let users = this.state.users;
+        users.push(user);
+        this.setState({
+            users: users
+        });
     }
 }
