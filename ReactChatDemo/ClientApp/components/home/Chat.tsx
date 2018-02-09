@@ -1,7 +1,8 @@
 import * as React from 'react';
 import * as moment from 'moment';
 
-import { ChatService, ChatMessage } from '../../services/ChatService';
+import { ChatService } from '../../services/ChatService';
+import { ChatMessage } from '../../services/Models/ChatMessage';
 
 interface ChatState {
     messages: ChatMessage[];

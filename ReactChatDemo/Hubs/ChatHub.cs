@@ -18,7 +18,7 @@ namespace ReactChatDemo.Hubs
         public void AddMessage(string message)
         {
             var chatMessage =  _chatService.CreateNewMessage("Juergen", message);
-            // Call the broadcastMessage method to update clients.
+            // Call the MessageAdded method to update clients.
             Clients.All.InvokeAsync("MessageAdded", chatMessage);
         }
     }

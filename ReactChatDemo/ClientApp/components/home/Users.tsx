@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { UsersService, User } from '../../services/UsersService';
+import { UsersService } from '../../services/UsersService';
+import { User } from '../../services/Models/User';
 
 interface UsersState {
     users: User[];

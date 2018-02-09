@@ -1,6 +1,7 @@
 ﻿import 'isomorphic-fetch';
 
 import WebsocketService from './WebsocketService'
+import { ChatMessage } from '../services/Models/ChatMessage';
 
 export class ChatService {
     private _messageAdded: any;
@@ -25,11 +26,4 @@ export class ChatService {
                 fetchInitialMessagesCallback(data);
             });
     }
-}
-
-export interface ChatMessage {
-    id: number;
-    date: Date;
-    message: string;
-    sender: string;
 }

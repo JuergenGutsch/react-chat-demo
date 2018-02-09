@@ -1,7 +1,5 @@
 ﻿import { HubConnection, TransportType, ConsoleLogger, LogLevel } from '@aspnet/signalr-client';
-
-import { ChatMessage } from './ChatService';
-import { User } from './UsersService';
+import { ChatMessage } from './Models/ChatMessage';
 
 class ChatWebsocketService {
     private _connection: HubConnection;

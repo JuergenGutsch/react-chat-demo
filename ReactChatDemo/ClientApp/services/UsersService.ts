@@ -1,6 +1,7 @@
 ﻿import 'isomorphic-fetch';
 
 import WebsocketService from './WebsocketService'
+import { User } from '../services/Models/User';
 
 export class UsersService {
     private _userLoggedOn: any;
@@ -25,9 +26,4 @@ export class UsersService {
                 fetchUsersCallback(data);
             });
     }
-}
-
-export interface User {
-    id: number;
-    name: string;
 }
