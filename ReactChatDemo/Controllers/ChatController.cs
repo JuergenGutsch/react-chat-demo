@@ -20,9 +20,9 @@ namespace ReactChatDemo.Controllers
         public IEnumerable<UserDetails> LoggedOnUsers()
         {
             return new[]{
-                new UserDetails { Id = 1, Name = "Juergen" },
-                new UserDetails { Id = 3, Name = "Marion" },
-                new UserDetails { Id = 2, Name = "Peter" },
+                new UserDetails { Id = 1, Name = "Joe" },
+                new UserDetails { Id = 3, Name = "Mary" },
+                new UserDetails { Id = 2, Name = "Pete" },
                 new UserDetails { Id = 4, Name = "Mo" } };
         }
 

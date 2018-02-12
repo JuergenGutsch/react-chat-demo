@@ -23,12 +23,16 @@
 
   <ItemGroup>
     <None Remove="ClientApp\services\ChatService.ts" />
+    <None Remove="ClientApp\services\Models\ChatMessage.ts" />
+    <None Remove="ClientApp\services\Models\User.ts" />
     <None Remove="ClientApp\services\UsersService.ts" />
     <None Remove="Services\WebSocketService.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\services\ChatService.ts" />
+    <TypeScriptCompile Include="ClientApp\services\Models\ChatMessage.ts" />
+    <TypeScriptCompile Include="ClientApp\services\Models\User.ts" />
     <TypeScriptCompile Include="ClientApp\services\UsersService.ts" />
     <TypeScriptCompile Include="ClientApp\services\WebsocketService.ts" />
   </ItemGroup>
