@@ -24,7 +24,7 @@ export class Chat extends React.Component<{}, ChatState> {
         let that = this;
         this._chatService = new ChatService((msg: ChatMessage) => {
             this.handleOnSocket(that, msg);
-        })
+        });
 
         this.handleOnInitialMessagesFetched = this.handleOnInitialMessagesFetched.bind(this);
         this.handlePanelRef = this.handlePanelRef.bind(this);
@@ -109,7 +109,7 @@ export class Chat extends React.Component<{}, ChatState> {
             return;
         }
 
-        this._chatService.addMessage(currentMessage);        
+        this._chatService.addMessage(currentMessage);
     }
 
     private focusField(that: Chat) {

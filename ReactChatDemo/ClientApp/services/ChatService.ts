@@ -19,7 +19,7 @@ export class ChatService {
         WebsocketService.sendMessage(message);
     }
 
-    public fetchInitialMessages(fetchInitialMessagesCallback: any) {
+    public fetchInitialMessages(fetchInitialMessagesCallback: (msg: ChatMessage[]) => void) {
         fetch('api/Chat/InitialMessages')
             .then(response => response.json() as Promise<ChatMessage[]>)
             .then(data => {

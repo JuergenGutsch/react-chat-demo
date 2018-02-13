@@ -8,7 +8,7 @@ export class UsersService {
 
     constructor(socketCallback: any) {
         this._userLoggedOn = socketCallback;
-        
+
         // Chat-Nachrichten vom Server empfangen
         WebsocketService.registerUserLoggedOn((id: number, name: string) => {
             this._userLoggedOn({
@@ -18,8 +18,7 @@ export class UsersService {
         });
     }
 
-    public fetchLogedOnUsers(fetchUsersCallback: any) {
-
+    public fetchLogedOnUsers(fetchUsersCallback: (msg: User[]) => void) {
         fetch('api/Chat/LoggedOnUsers')
             .then(response => response.json() as Promise<User[]>)
             .then(data => {
