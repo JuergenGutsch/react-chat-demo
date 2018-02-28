@@ -1,7 +1,4 @@
-﻿using ReactChatDemo.User;
-using Microsoft.AspNetCore.SignalR;
-using ReactChatDemo.Models;
-using System;
+﻿using Microsoft.AspNetCore.SignalR;
 using ReactChatDemo.Services;
 
 namespace ReactChatDemo.Hubs
@@ -17,7 +14,8 @@ namespace ReactChatDemo.Hubs
 
         public void AddMessage(string message)
         {
-            var chatMessage =  _chatService.CreateNewMessage("Juergen", message);
+            var username = Context.User.Identity.Name;
+            var chatMessage = _chatService.CreateNewMessage(username, message);
             // Call the MessageAdded method to update clients.
             Clients.All.InvokeAsync("MessageAdded", chatMessage);
         }

@@ -1,9 +1,89 @@
-﻿using ReactChatDemo.Models;
+﻿using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Table;
+using ReactChatDemo.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ReactChatDemo.Services
 {
+    public class ChatMessageRepository : IChatMessageRepository
+    {
+        private const string accountName = "reactchatdemo";
+        private const string accountKey = "hxBCWoyJaOdI0QbtaL2neMCQo+2QH9RjtjAiSlWh/2DLlRZOhnurDG8KFmaCHW/SJWkQGXPhmQkecPp+RP2rgA==";
+        private const string tableName = "reactchatmessages";
+
+        private readonly CloudTableClient _tableClient;
+
+        public ChatMessageRepository()
+        {
+            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
+            _tableClient = storageAccount.CreateCloudTableClient();
+
+        }
+
+        // https://docs.microsoft.com/en-us/azure/cosmos-db/table-storage-how-to-use-dotnet
+        public async Task<List<ChatMessageTableEntity>> GetTopMessages(int number = 100)
+        {
+            var table = _tableClient.GetTableReference(tableName);
+
+            // Create the table if it doesn't exist.
+            await table.CreateIfNotExistsAsync();
+
+            var query = new TableQuery<ChatMessageTableEntity>()
+                .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "chatmessages"))
+                .Take(number);
+
+            var result = await table.ExecuteQuerySegmentedAsync(query, null);
+
+            return result.Results;
+        }
+
+        // https://docs.microsoft.com/en-us/azure/cosmos-db/table-storage-how-to-use-dotnet
+        public async Task<ChatMessageTableEntity> AddMessage(string message, string sender)
+        {
+            var table = _tableClient.GetTableReference(tableName);
+
+            // Create the table if it doesn't exist.
+            await table.CreateIfNotExistsAsync();
+
+            var chatMessage = new ChatMessageTableEntity(Guid.NewGuid())
+            {
+                Message = message,
+                Sender = sender
+            };
+
+            // Create the TableOperation object that inserts the customer entity.
+            TableOperation insertOperation = TableOperation.Insert(chatMessage);
+
+            // Execute the insert operation.
+            await table.ExecuteAsync(insertOperation);
+
+            return chatMessage;
+        }
+
+    }
+
+    public class ChatMessageTableEntity : TableEntity
+    {
+        public ChatMessageTableEntity(Guid key)
+        {
+            PartitionKey = "chatmessages";
+            RowKey = key.ToString("X");
+        }
+
+        public ChatMessageTableEntity() { }
+
+        public string Message { get; set; }
+
+        public string Sender { get; set; }
+    }
+
+    public interface IChatMessageRepository
+    {
+    }
+
     public class ChatService : IChatService
     {
         private IDictionary<int, ChatMessage> messages;
