@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReactChatDemo.Models;
@@ -30,9 +31,9 @@ namespace ReactChatDemo.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<ChatMessage> InitialMessages()
+        public async Task<IEnumerable<ChatMessage>> InitialMessages()
         {
-            return _chatService.GetAllInitially();
+            return await _chatService.GetAllInitially();
         }
     }
 }

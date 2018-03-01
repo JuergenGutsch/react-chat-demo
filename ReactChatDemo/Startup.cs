@@ -30,7 +30,8 @@ namespace ReactChatDemo
             services.AddMvc();
             services.AddSignalR();
             services.AddSingleton<IUserTracker, UserTracker>();
-            services.AddSingleton<IChatService, ChatService>();
+            services.AddTransient<IChatMessageRepository, ChatMessageRepository>();
+            services.AddTransient<IChatService, ChatService>();
 
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
