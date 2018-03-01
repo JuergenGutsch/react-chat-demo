@@ -4,17 +4,14 @@ import WebsocketService from './WebsocketService'
 import { User } from '../services/Models/User';
 
 export class UsersService {
-    private _userLoggedOn: any;
+    private _userLoggedOn: (user: User) => void;
 
-    constructor(socketCallback: any) {
+    constructor(socketCallback: (user: User) => void) {
         this._userLoggedOn = socketCallback;
 
         // Chat-Nachrichten vom Server empfangen
-        WebsocketService.registerUserLoggedOn((id: number, name: string) => {
-            this._userLoggedOn({
-                id: id,
-                name: name
-            })
+        WebsocketService.registerUserLoggedOn((user: User) => {
+            this._userLoggedOn(user);
         });
     }
 

@@ -6,7 +6,7 @@ using ReactChatDemo.User;
 
 namespace ReactChatDemo.Hubs
 {
-    public class HubWithPresence : Hub
+    public abstract class HubWithPresence : Hub
     {
         private IUserTracker _userTracker;
 
@@ -15,21 +15,10 @@ namespace ReactChatDemo.Hubs
             _userTracker = userTracker;
             _userTracker.UserJoined += OnUsersJoined;
             _userTracker.UserLeft += OnUsersLeft;
-
         }
 
-        public async Task<IEnumerable<UserDetails>> GetUsersOnline()
-        {
-            return await _userTracker.UsersOnline();
-        }
+        public virtual async void OnUsersJoined(UserDetails user) { }
 
-        public virtual void OnUsersJoined(UserDetails user)
-        {
-        }
-
-        public virtual void OnUsersLeft(UserDetails user)
-        {
-        }
-
+        public virtual async void OnUsersLeft(UserDetails user) { }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 using ReactChatDemo.Models;
 
 namespace ReactChatDemo.User
@@ -14,22 +13,23 @@ namespace ReactChatDemo.User
 
         private ICollection<UserDetails> joinedUsers = new List<UserDetails>();
 
-        public void AddUser(HubConnectionContext connection, UserDetails userDetails)
+        public void AddUser(string sid, string name)
         {
-            userDetails.ConnectionId = connection.ConnectionId;
-
-            if (!joinedUsers.Any(x => x.Id == userDetails.Id))
+            if (!joinedUsers.Any(x => x.Id == sid))
             {
-                joinedUsers.Add(userDetails);
-                UserJoined?.Invoke(userDetails);
+                var user = new UserDetails
+                {
+                    Id = sid,
+                    Name = name
+                };
+                joinedUsers.Add(user);
+                UserJoined?.Invoke(user);
             }
         }
 
-        public void RemoveUser(HubConnectionContext connection)
+        public void RemoveUser(string sid)
         {
-            var connectionId = connection.ConnectionId;
-
-            var user = joinedUsers.FirstOrDefault(x => x.ConnectionId == connectionId);
+            var user = joinedUsers.FirstOrDefault(x => x.Id == sid);
             if (user != null)
             {
                 joinedUsers.Remove(user);
@@ -37,9 +37,9 @@ namespace ReactChatDemo.User
             }
         }
 
-        public Task<ICollection<UserDetails>> UsersOnline()
+        public IEnumerable<UserDetails> UsersOnline()
         {
-            return Task.FromResult(joinedUsers);
+            return joinedUsers;
         }
     }
 }

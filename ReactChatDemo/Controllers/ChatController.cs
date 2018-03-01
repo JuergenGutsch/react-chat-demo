@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReactChatDemo.Models;
 using ReactChatDemo.Services;
+using ReactChatDemo.User;
 
 namespace ReactChatDemo.Controllers
 {
@@ -12,22 +13,18 @@ namespace ReactChatDemo.Controllers
     public class ChatController : Controller
     {
         private readonly IChatService _chatService;
+        private readonly IUserTracker _userTracker;
 
-        public ChatController(IChatService chatService)
+        public ChatController(IChatService chatService, IUserTracker userTracker)
         {
             _chatService = chatService;
+            _userTracker = userTracker;
         }
         // GET: api/<controller>
         [HttpGet("[action]")]
         public IEnumerable<UserDetails> LoggedOnUsers()
         {
-            return new[]
-            {
-                new UserDetails { Id = 1, Name = "Joe" },
-                new UserDetails { Id = 3, Name = "Mary" },
-                new UserDetails { Id = 2, Name = "Pete" },
-                new UserDetails { Id = 4, Name = "Mo" }
-            };
+            return _userTracker.UsersOnline();
         }
 
         [HttpGet("[action]")]

@@ -1,5 +1,6 @@
 ﻿import { HubConnection, TransportType, ConsoleLogger, LogLevel } from '@aspnet/signalr-client';
 import { ChatMessage } from './Models/ChatMessage';
+import { User } from './Models/User';
 
 class ChatWebsocketService {
     private _connection: HubConnection;
@@ -26,10 +27,10 @@ class ChatWebsocketService {
         this._connection.invoke('AddMessage', message);
     }
 
-    registerUserLoggedOn(userLoggedOn: (id: number, name: string) => void) {
+    registerUserLoggedOn(userLoggedOn: (user: User) => void) {
         // get new user from the server
-        this._connection.on('UserLoggedOn', (id: number, name: string) => {
-            userLoggedOn(id, name);
+        this._connection.on('UserLoggedOn', (user: User) => {
+            userLoggedOn(user);
         });
     }
 }
