@@ -3,7 +3,6 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using ReactChatDemo.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +28,6 @@ namespace ReactChatDemo.Services
             _tableClient = storageAccount.CreateCloudTableClient();
         }
 
-        // https://docs.microsoft.com/en-us/azure/cosmos-db/table-storage-how-to-use-dotnet
         public async Task<IEnumerable<ChatMessage>> GetTopMessages(int number = 100)
         {
             var table = _tableClient.GetTableReference(_tableName);
@@ -60,7 +58,6 @@ namespace ReactChatDemo.Services
             return result;
         }
 
-        // https://docs.microsoft.com/en-us/azure/cosmos-db/table-storage-how-to-use-dotnet
         public async Task AddMessage(ChatMessage message)
         {
             var table = _tableClient.GetTableReference(_tableName);
