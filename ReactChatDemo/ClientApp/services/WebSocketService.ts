@@ -1,4 +1,4 @@
-﻿import { HubConnection, TransportType, ConsoleLogger, LogLevel } from '@aspnet/signalr-client';
+﻿import { HubConnection, TransportType, ConsoleLogger, LogLevel, IConnection, IHubConnectionOptions } from '@aspnet/signalr';
 import { ChatMessage } from './Models/ChatMessage';
 import { User } from './Models/User';
 
@@ -9,9 +9,16 @@ class ChatWebsocketService {
         var transport = TransportType.WebSockets;
         let logger = new ConsoleLogger(LogLevel.Information);
 
+        let options: IHubConnectionOptions = {
+            transport: transport,
+            logger:logger
+        };
+        let url: string = `http://${document.location.host}/chat`;
+
         // create Connection
-        this._connection = new HubConnection(`http://${document.location.host}/chat`,
-            { transport: transport, logging: logger });
+        this._connection = new HubConnection(
+            url,
+            options);
         // start connection
         this._connection.start().catch(err => console.error(err, 'red'));
     }

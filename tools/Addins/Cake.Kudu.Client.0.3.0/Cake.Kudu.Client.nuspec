@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Cake.Kudu.Client</id>
+    <version>0.3.0</version>
+    <authors>WCOM AB</authors>
+    <owners>WCOM AB, cake-contrib</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/cake-contrib/Cake.Kudu.Client/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/cake-contrib/Cake.Kudu.Client/</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</iconUrl>
+    <description>Cake add-in to help with remotely communicating with Kudu using C#</description>
+    <summary>Cake AddIn that extends Cake with aliases for remotely communicating with Azure App Services Kudu engine.</summary>
+    <copyright>Copyright (c) WCOM AB</copyright>
+    <tags>Cake, Script, Build, Kudu</tags>
+  </metadata>
+</package>

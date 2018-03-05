@@ -1,0 +1,1150 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cake.Kudu.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Cake.Kudu.Client.Command.IKuduCommandResult">
+            <summary>
+            Result of Kudu command execution.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.Command.IKuduCommandResult.Output">
+            <summary>
+            Gets the console output of the command.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.Command.IKuduCommandResult.Error">
+            <summary>
+            Gets the error output of the command.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.Command.IKuduCommandResult.ExitCode">
+            <summary>
+            Gets the console exit code of the command.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.Command.KuduCommandResult">
+            <summary>
+            Result of Kudu command execution.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.Command.KuduCommandResult.Output">
+            <summary>
+            Gets or sets the console output of the command.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.Command.KuduCommandResult.Error">
+            <summary>
+            Gets or sets the error output of the command.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.Command.KuduCommandResult.ExitCode">
+            <summary>
+            Gets or sets the console exit code of the command.
+            </summary>
+        </member>
+        <member name="M:Cake.Kudu.Client.Command.KuduCommandResult.ToString">
+            <summary>
+            ToString override for <see ref="KuduCommandResult"/>.
+            </summary>
+            <returns><see ref="KuduCommandResult"/> as string.</returns>
+        </member>
+        <member name="T:Cake.Kudu.Client.Command.NamespaceDoc">
+            <summary>
+            This namespace contain Kudu client scommand types.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.Extensions.KuduClientCommandExtensions">
+            <summary>
+            Extends <see cref="T:Cake.Kudu.Client.IKuduClient"/> with remote CLI command execution methods.
+            </summary>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientCommandExtensions.ExecuteCommand(Cake.Kudu.Client.IKuduClient,System.String,System.String,Cake.Core.IO.ProcessArgumentBuilder)">
+             <summary>
+             Executes an arbitrary command line and return its output.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="command">The command to execute.</param>
+             <param name="directory">The remote directory to execute command in.</param>
+             <param name="arguments">The arguments.</param>
+             <returns><see ref="KuduCommandResult"/></returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             IKuduCommandResult commandResult = kuduClient.ExecuteCommand(
+                 "echo",
+                 "D:/home/site/wwwroot",
+                 "hello");
+            
+             Information(
+                 "Output:\r\n{0}\r\nError:\r\n{1}\r\nExitCode: {2}",
+                 commandResult.Output,
+                 commandResult.Error,
+                 commandResult.ExitCode);
+             </code>
+             </example>
+        </member>
+        <member name="T:Cake.Kudu.Client.Extensions.KuduClientSettingsExtensions">
+            <summary>
+            Extends <see cref="T:Cake.Kudu.Client.IKuduClient"/> with remote app service settings methods.
+            </summary>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientSettingsExtensions.SettingsGet(Cake.Kudu.Client.IKuduClient)">
+             <summary>
+             Get settings from appservice.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <returns>The appservice settings.</returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             ReadOnlyDictionary&lt;string, string&gt; settings = kuduClient.SettingsGet();
+            
+             foreach(var setting in settings)
+             {
+                 Information(
+                     "{0}={1}",
+                     setting.Key,
+                     setting.Value);
+             }
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientSettingsExtensions.SettingsSet(Cake.Kudu.Client.IKuduClient,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
+             <summary>
+             Set settings to appservice.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="settings">The settings to set.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             var newSettings = new Dictionary&lt;string, string&gt;
+                 {
+                     { "FOO", "Bar" },
+                     { "JOHN", "Doe" }
+                 };
+            
+             kuduClient.SettingsSet(
+                 newSettings);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientSettingsExtensions.SettingsDelete(Cake.Kudu.Client.IKuduClient,System.String)">
+             <summary>
+             Delete setting from appservice.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="key">The key of settings to delete.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             kuduClient.SettingsDelete("FOO");
+             </code>
+             </example>
+        </member>
+        <member name="T:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions">
+            <summary>
+            Extends <see cref="T:Cake.Kudu.Client.IKuduClient"/> with virtual file system methods.
+            </summary>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSList(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Lists remote resources for a given path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote directory path.</param>
+             <returns><see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/> instance containing remote directory and file paths.</returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath remotePath = "/site/wwwroot";
+            
+             IKuduVFS kuduVFS = kuduClient.VFSList(remotePath);
+            
+             Information("Directories and files");
+             foreach(IKuduPath path in kuduVFS.Entries)
+             {
+                 Information(
+                     "Name: {0}, Size: {1}, Created: {2:yyyy-MM-dd HH:mm:ss}, Modified: {3:yyyy-MM-dd HH:mm:ss}, Mime: {4}",
+                     path.Name,
+                     path.Size,
+                     path.Created,
+                     path.Modified,
+                     path.Mime);
+             }
+            
+             Information("Directories");
+             foreach(IKuduDirectoryPath directoryPath in kuduVFS.Directories)
+             {
+                 Information(
+                     "Directory: {0}, Size: {1}, Created: {2:yyyy-MM-dd HH:mm:ss}, Modified: {3:yyyy-MM-dd HH:mm:ss}, Mime: {4}, Path: {5}",
+                     directoryPath.Name,
+                     directoryPath.Size,
+                     directoryPath.Created,
+                     directoryPath.Modified,
+                     directoryPath.Mime,
+                     directoryPath.Path);
+             }
+            
+             Information("Files");
+             foreach(IKuduFilePath filePath in kuduVFS.Files)
+             {
+                 Information(
+                     "File: {0}, Size: {1}, Created: {2:yyyy-MM-dd HH:mm:ss}, Modified: {3:yyyy-MM-dd HH:mm:ss}, Mime: {4}, Path: {5}",
+                     filePath.Name,
+                     filePath.Size,
+                     filePath.Created,
+                     filePath.Modified,
+                     filePath.Mime,
+                     filePath.Path);
+             }
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDownloadFile(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.FilePath,Cake.Core.IO.FilePath)">
+             <summary>
+             Downloads remote file locally.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote source path.</param>
+             <param name="localPath">The local target path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+            
+             FilePath localFilePath = "./hello.txt";
+            
+             kuduClient.VFSDownloadFile(remoteFilePath, localFilePath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDownloadStream(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.FilePath)">
+             <summary>
+             Downloads remote file to stream
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote source path.</param>
+             <returns>Content as <see cref="T:System.IO.Stream"/></returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+            
+             Stream resultStream = kuduClient.VFSDownloadStream(remoteFilePath);
+            
+             Information("Result length: {0}", resultStream.Length);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDownloadString(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.FilePath,System.Text.Encoding)">
+             <summary>
+             Downloads remote file as string.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote source path.</param>
+             <param name="encoding">The text encoding.</param>
+             <returns>Content as string.</returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+            
+             string resultString = kuduClient.VFSDownloadString(remoteFilePath);
+            
+             Information("Result: {0}", resultString);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSUploadFile(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.FilePath,Cake.Core.IO.FilePath)">
+             <summary>
+             Uploads file to remote path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="localPath">The local source file path.</param>
+             <param name="remotePath">The remote target file path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+            
+             FilePath localFilePath = "./hello.txt";
+            
+             kuduClient.VFSUploadFile(localFilePath, remoteFilePath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSUploadStream(Cake.Kudu.Client.IKuduClient,System.IO.Stream,Cake.Core.IO.FilePath)">
+             <summary>
+             Uploads stream to remote path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="sourceStream">The source stream.</param>
+             <param name="remotePath">The remote target file path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+            
+             FilePath localFilePath = "./hello.txt";
+            
+             using(Stream sourceStream = kuduClient.FileSystem.GetFile(localFilePath).OpenRead())
+             {
+                 kuduClient.VFSUploadStream(sourceStream, remoteFilePath);
+             }
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSUploadString(Cake.Kudu.Client.IKuduClient,System.String,Cake.Core.IO.FilePath,System.Text.Encoding)">
+             <summary>
+             Uploads stream to remote path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="sourceString">The source string.</param>
+             <param name="remotePath">The remote target file path.</param>
+             <param name="encoding">The text encoding.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             string sourceString = "Hello";
+             FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+            
+             kuduClient.VFSUploadString(sourceString, remoteFilePath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSCreateDirectory(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Creates directory on remote path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote target path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath remoteDirectoryPath = "/site/wwwroot/hello/";
+             kuduClient.VFSCreateDirectory(remoteDirectoryPath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDeleteFile(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.FilePath)">
+             <summary>
+             Deletes remote file.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote target path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+             kuduClient.VFSDeleteFile(remoteFilePath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDeleteDirectory(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Deletes remote directory.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote target path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath remoteDirectoryPath = "/site/wwwroot/hello/";
+            
+             kuduClient.VFSDeleteDirectory(remoteDirectoryPath);
+             </code>
+             </example>
+        </member>
+        <member name="T:Cake.Kudu.Client.Extensions.KuduClientZipExtensions">
+            <summary>
+            Extends <see cref="T:Cake.Kudu.Client.IKuduClient"/> with remote zip methods.
+            </summary>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDownloadFile(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath,Cake.Core.IO.FilePath)">
+             <summary>
+             Downloads remote directory to local zip file.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote source path.</param>
+             <param name="localPath">The local target path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath remoteDirectoryPath = "/site/wwwroot/";
+             FilePath localFilePath = "./wwwroot.zip";
+            
+             kuduClient.ZipDownloadFile(remoteDirectoryPath, localFilePath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDownloadStream(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Downloads remote direactory as zip to stream.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="remotePath">The remote source path.</param>
+             <returns>Content as <see cref="T:System.IO.Stream"/></returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath remoteDirectoryPath = "/site/wwwroot/assets/";
+            
+             Stream resultStream = kuduClient.ZipDownloadStream(remoteDirectoryPath);
+            
+             Information("Result length: {0}", resultStream.Length);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipUploadFile(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.FilePath,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Uploads zip file to expand into remote directory path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="localPath">The local source file path.</param>
+             <param name="remotePath">The remote target directory path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath sourceDirectoryPath = "./Documentation/";
+             DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
+             FilePath zipFilePath = "./Documentation.zip";
+            
+             Zip(sourceDirectoryPath, zipFilePath);
+            
+             kuduClient.ZipUploadFile(
+                zipFilePath,
+                remoteDirectoryPath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipUploadStream(Cake.Kudu.Client.IKuduClient,System.IO.Stream,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Uploads zip stream and extracts to remote directory path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="sourceStream">The source stream.</param>
+             <param name="remotePath">The remote directory path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath sourceDirectoryPath = "./Documentation/";
+             DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
+             FilePath zipFilePath = "./Documentation.zip";
+            
+             Zip(sourceDirectoryPath, zipFilePath);
+            
+             using(Stream sourceStream = kuduClient.FileSystem.GetFile(zipFilePath).OpenRead())
+             {
+                 kuduClient.ZipUploadStream(
+                    sourceStream,
+                    remoteDirectoryPath);
+             }
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipUploadDirectory(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Uploads zip stream and extracts to remote directory path.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="localPath">The local directory path.</param>
+             <param name="remotePath">The remote directory path.</param>
+             <remarks>This will zip the folder in-memory.</remarks>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath sourceDirectoryPath = "./Documentation/";
+             DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
+            
+             kuduClient.ZipUploadDirectory(
+                 sourceDirectoryPath,
+                 remoteDirectoryPath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDeployFile(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.FilePath)">
+             <summary>
+             Deploys zip file to Kudu wesite.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="localPath">The local source file path.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath sourceDirectoryPath = "./Documentation/";
+             FilePath zipFilePath = "./Documentation.zip";
+            
+             Zip(sourceDirectoryPath, zipFilePath);
+            
+             kuduClient.ZipDeployFile(
+                zipFilePath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDeployStream(Cake.Kudu.Client.IKuduClient,System.IO.Stream)">
+             <summary>
+             Deploys zip stream Kudu website.
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="sourceStream">The source stream.</param>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath sourceDirectoryPath = "./Documentation/";
+             FilePath zipFilePath = "./Documentation.zip";
+            
+             Zip(sourceDirectoryPath, zipFilePath);
+            
+             using(Stream sourceStream = kuduClient.FileSystem.GetFile(zipFilePath).OpenRead())
+             {
+                 kuduClient.ZipDeployStream(
+                    sourceStream);
+             }
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDeployDirectory(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Deploy local directory to KuduWebsite
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="localPath">The local directory path.</param>
+             <remarks>This will zip the folder in-memory.</remarks>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             DirectoryPath sourceDirectoryPath = "./Documentation/";
+            
+             kuduClient.ZipDeployDirectory(
+                 sourceDirectoryPath);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipRunFromDirectory(Cake.Kudu.Client.IKuduClient,Cake.Core.IO.DirectoryPath)">
+             <summary>
+             Deploy local directory to KuduWebsite as read only Zip file system
+             </summary>
+             <param name="client">The Kudu client.</param>
+             <param name="localPath">The local directory path.</param>
+             <returns>The path of deployed Zip.</returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+            
+             FilePath deployFilePath = kuduClient.ZipRunFromDirectory(sourceDirectoryPath);
+            
+             Information("Deployed to {0}", deployFilePath);
+             </code>
+             </example>
+        </member>
+        <member name="T:Cake.Kudu.Client.Extensions.NamespaceDoc">
+            <summary>
+            This namespace contains IKuduClient extension methods.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.IKuduClient">
+            <summary>
+            Represents a client that talks to Kudu rest API.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.IKuduClient.FileSystem">
+            <summary>
+            Gets the Cake context.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.IKuduClient.Log">
+            <summary>
+            Gets the Cake log.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.IKuduClient.Environment">
+            <summary>
+            Gets the Cake environment.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.IKuduClient.Settings">
+            <summary>
+            Gets the Kudu client settings.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.IKuduClient.HttpClient">
+            <summary>
+            Gets the underlying HttpClient used for remote API calls.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.KuduClient">
+            <inheritdoc />
+        </member>
+        <member name="M:Cake.Kudu.Client.KuduClient.#ctor(Cake.Core.ICakeContext,Cake.Kudu.Client.KuduClientSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Kudu.Client.KuduClient"/> class.
+            </summary>
+            <param name="context">The Cake context.</param>
+            <param name="settings">The provider settings.</param>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClient.FileSystem">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClient.Log">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClient.Environment">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClient.Settings">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClient.HttpClient">
+            <inheritdoc />
+        </member>
+        <member name="T:Cake.Kudu.Client.KuduClientAliases">
+            <summary>
+            Contains functionality related to remotely communicating with Azure App Services Kudu engine.
+            </summary>
+        </member>
+        <member name="M:Cake.Kudu.Client.KuduClientAliases.KuduClient(Cake.Core.ICakeContext,System.String,System.String,System.String)">
+             <summary>
+              Get a Kudu client using supplied
+             </summary>
+             <param name="context">The context.</param>
+             <param name="baseUri">The base uri for site Kudu environment.</param>
+             <param name="userName">The user name used to authenticate agains Kudu api.</param>
+             <param name="password">The password used to authenticate agains Kudu api.</param>
+             <returns>A new instance of a <see ref="IKuduClient"/>.</returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 baseUri,
+                 userName,
+                 password);
+             </code>
+             </example>
+        </member>
+        <member name="M:Cake.Kudu.Client.KuduClientAliases.KuduClient(Cake.Core.ICakeContext,Cake.Kudu.Client.KuduClientSettings)">
+             <summary>
+             Get a Kudu client using supplied <see ref="KuduClientSettings" />.
+             </summary>
+             <param name="context">The context.</param>
+             <param name="settings">The settings.</param>
+             <returns>A new instance of a <see ref="IKuduClient"/>.</returns>
+             <example>
+             <code>
+             #addin nuget:?package=Cake.Kudu.Client
+            
+             string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+                     userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+                     password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+            
+             IKuduClient kuduClient = KuduClient(
+                 new KuduClientSettings(
+                     baseUri,
+                    userName,
+                    password
+                ){
+                    Timeout = TimeSpan.FromSeconds(120)
+                    });
+             </code>
+             </example>
+        </member>
+        <member name="T:Cake.Kudu.Client.KuduClientSettings">
+            <summary>
+            Represents client settings used by Kudu client.
+            </summary>
+        </member>
+        <member name="M:Cake.Kudu.Client.KuduClientSettings.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Kudu.Client.KuduClientSettings"/> class.
+            </summary>
+            <param name="baseUri">The base uri for site Kudu environment.</param>
+            <param name="userName">The user name used to authenticate agains Kudu api.</param>
+            <param name="password">The password used to authenticate agains Kudu api.</param>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.BaseUri">
+            <summary>
+            Gets the base uri for site Kudu environment
+            </summary>
+            <example>
+            https://yoursite.scm.azurewebsites.net
+            </example>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.UserName">
+            <summary>
+            Gets the user name used to authenticate agains Kudu api.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.Password">
+            <summary>
+            Gets the password used to authenticate agains Kudu api.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.Timeout">
+            <summary>
+            Gets or sets the timeout for API operations.
+            </summary>
+            <remarks>Default 300 seconds.</remarks>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.HttpClientCustomization">
+            <summary>
+            Gets or sets the delegate for customizing the HttpClient used for API options
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.FileSystem">
+            <summary>
+            Gets or sets the local file system used by client.
+            </summary>
+            <remarks>Defaults to <see cref="P:Cake.Core.ICakeContext.FileSystem"/>.</remarks>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.Log">
+            <summary>
+            Gets or sets the log used by kudu client.
+            </summary>
+            <remarks>Defaults to <see cref="P:Cake.Core.ICakeContext.Log"/>.</remarks>
+        </member>
+        <member name="P:Cake.Kudu.Client.KuduClientSettings.Environment">
+            <summary>
+            Gets or sets the environment used by kudu client.
+            </summary>
+            <remarks>Defaults to <see cref="P:Cake.Core.ICakeContext.Environment"/>.</remarks>
+        </member>
+        <member name="T:Cake.Kudu.Client.NamespaceDoc">
+            <summary>
+            This namespace contains Kudu clients aliases.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.NamespaceDoc">
+            <summary>
+            This namespace contain Kudu virtual file system types.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.IKuduDirectoryPath">
+            <summary>
+            Represents a remote directory path for <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduDirectoryPath.Path">
+            <summary>
+            Gets the remote directory path.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.IKuduFilePath">
+            <summary>
+            Represents a remote file path for <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduFilePath.Path">
+            <summary>
+            Gets the remote file path.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.IKuduPath">
+            <summary>
+            Represents a remote path for <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduPath.Name">
+            <summary>
+            Gets the name of the <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/> <see cref="T:Cake.Kudu.Client.VFS.IKuduFilePath"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduPath.Size">
+            <summary>
+            Gets the size of the <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/> <see cref="T:Cake.Kudu.Client.VFS.IKuduFilePath"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduPath.Modified">
+            <summary>
+            Gets the modified date of the <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/> <see cref="T:Cake.Kudu.Client.VFS.IKuduFilePath"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduPath.Created">
+            <summary>
+            Gets the creation date of the <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/> <see cref="T:Cake.Kudu.Client.VFS.IKuduFilePath"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduPath.Mime">
+            <summary>
+            Gets the mime type of the <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/> <see cref="T:Cake.Kudu.Client.VFS.IKuduFilePath"/>.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.IKuduVFS">
+            <summary>
+            Repreesents a remote Kudu directory.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduVFS.Path">
+            <summary>
+            Gets the current path.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduVFS.Entries">
+            <summary>
+            Gets the files and directories for given remote <see cref="T:Cake.Core.IO.DirectoryPath"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduVFS.Directories">
+            <summary>
+            Gets the directories for given remote <see cref="T:Cake.Core.IO.DirectoryPath"/>.
+            </summary>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.IKuduVFS.Files">
+            <summary>
+            Gets the files for given remote <see cref="T:Cake.Core.IO.DirectoryPath"/>.
+            </summary>
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.KuduDirectoryPath">
+            <inheritdoc />
+        </member>
+        <member name="M:Cake.Kudu.Client.VFS.KuduDirectoryPath.#ctor(Cake.Kudu.Client.VFS.KuduPath)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Kudu.Client.VFS.KuduDirectoryPath"/> class.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Cake.Kudu.Client.VFS.KuduDirectoryPath.#ctor(System.String,System.Int64,System.DateTimeOffset,System.DateTimeOffset,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Kudu.Client.VFS.KuduDirectoryPath"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="size">The size.</param>
+            <param name="modified">The modified date.</param>
+            <param name="created">The creation date.</param>
+            <param name="mime">The mime type.</param>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduDirectoryPath.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduDirectoryPath.Size">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduDirectoryPath.Modified">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduDirectoryPath.Created">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduDirectoryPath.Mime">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduDirectoryPath.Path">
+            <inheritdoc />
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.KuduFilePath">
+            <inheritdoc />
+        </member>
+        <member name="M:Cake.Kudu.Client.VFS.KuduFilePath.#ctor(Cake.Kudu.Client.VFS.KuduPath)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Kudu.Client.VFS.KuduFilePath"/> class.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Cake.Kudu.Client.VFS.KuduFilePath.#ctor(System.String,System.Int64,System.DateTimeOffset,System.DateTimeOffset,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Kudu.Client.VFS.KuduFilePath"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="size">The size.</param>
+            <param name="modified">The modified date.</param>
+            <param name="created">The creation date.</param>
+            <param name="mime">The mime type.</param>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduFilePath.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduFilePath.Size">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduFilePath.Modified">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduFilePath.Created">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduFilePath.Mime">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduFilePath.Path">
+            <inheritdoc />
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.KuduPath">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduPath.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduPath.Size">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduPath.Modified">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduPath.Created">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduPath.Mime">
+            <inheritdoc />
+        </member>
+        <member name="T:Cake.Kudu.Client.VFS.KuduVFS">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduVFS.Path">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduVFS.Entries">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduVFS.Directories">
+            <inheritdoc />
+        </member>
+        <member name="P:Cake.Kudu.Client.VFS.KuduVFS.Files">
+            <inheritdoc />
+        </member>
+        <member name="M:Cake.Kudu.Client.VFS.KuduVFS.ToKuduVfs(Cake.Core.IO.DirectoryPath,System.Collections.Generic.ICollection{Cake.Kudu.Client.VFS.KuduPath})">
+            <summary>
+            Converts a collection of <see cref="T:Cake.Kudu.Client.VFS.KuduPath"/> paths to <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/>.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="paths">The paths.</param>
+            <returns>A <see cref="T:Cake.Kudu.Client.VFS.IKuduVFS"/>.</returns>
+        </member>
+    </members>
+</doc>
