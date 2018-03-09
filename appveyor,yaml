@@ -1,0 +1,13 @@
+version: 1.0.0-preview1-{build}
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+  - develop
+skip_tags: true
+image: Visual Studio 2017 Preview
+build_script:
+- ps: .\build.ps1
+test: off
+deploy: off

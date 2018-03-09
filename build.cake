@@ -1,5 +1,11 @@
 #addin nuget:?package=Cake.Kudu.Client
 
+/*
+$env:KUDU_CLIENT_BASEURI_APP = "https://cake-demo.scm.azurewebsites.net:443"
+$env:KUDU_CLIENT_USERNAME_APP = "`$cake-demo"
+$env:KUDU_CLIENT_PASSWORD_APP = ""
+*/ 
+
 string  baseUriApp     = EnvironmentVariable("KUDU_CLIENT_BASEURI_APP"),
         userNameApp    = EnvironmentVariable("KUDU_CLIENT_USERNAME_APP"),
 		    passwordApp    = EnvironmentVariable("KUDU_CLIENT_PASSWORD_APP"),
@@ -16,36 +22,54 @@ Task("Clean")
     CleanDirectory("./publish/");
   });
 
-Task("Build")
+Task("Restore")
 	.IsDependentOn("Clean")
+	.Does(() => {
+		DotNetCoreRestore("./react-chat-demo.sln");
+	});
+
+Task("Build")
+	.IsDependentOn("Restore")
 	.Does(() => 
 	{
-		DotNetCoreBuild("./react-chat-demo.sln");
+		var settings = new DotNetCoreBuildSettings
+		{
+			NoRestore = true,
+			Configuration = "Release"
+		};
+		DotNetCoreBuild("./react-chat-demo.sln", settings);
 	});
 
 Task("Test")
 	.IsDependentOn("Build")
 	.Does(() =>
 	{
-    Information("No tests yet.");
+		var settings = new DotNetCoreTestSettings
+		{
+			NoBuild = true,
+			Configuration = "Release",
+			NoRestore = true
+		};
+		var testProjects = GetFiles("./**/*.Tests.csproj");
+		foreach(var project in testProjects)
+		{
+				DotNetCoreTest(project.FullPath, settings);
+		}
 	});
 
 Task("Publish")
 	.IsDependentOn("Test")
 	.Does(() => 
 	{
-		DotNetCorePublish("./ReactChatDemo/ReactChatDemo.csproj", 
-      new DotNetCorePublishSettings
-      {
-        Configuration = "Release",
-        OutputDirectory = "./publish/ReactChatDemo/"
-      });
-		DotNetCorePublish("./ReactChatDemoIdentities/ReactChatDemoIdentities.csproj", 
-      new DotNetCorePublishSettings
-      {
-        Configuration = "Release",
-        OutputDirectory = "./publish/ReactChatDemoIdentities/"
-      });
+		var settings = new DotNetCorePublishSettings
+		{
+			Configuration = "Release",
+			OutputDirectory = "./publish/ReactChatDemo/",
+			NoRestore = true
+		};
+		DotNetCorePublish("./ReactChatDemo/ReactChatDemo.csproj", settings);
+		settings.OutputDirectory = "./publish/ReactChatDemoIdentities/";
+		DotNetCorePublish("./ReactChatDemoIdentities/ReactChatDemoIdentities.csproj", settings);
 	});
 
 Task("Deploy")
@@ -78,8 +102,8 @@ Task("Deploy")
 Task("Default")
 	.IsDependentOn("Publish")
   .Does(() =>
-{
-  Information("Your build is done :-)");
-});
+  {
+    Information("Your build is done :-)");
+  });
 
 RunTarget(target);
