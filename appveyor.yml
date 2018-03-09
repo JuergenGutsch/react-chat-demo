@@ -4,7 +4,6 @@ pull_requests:
 branches:
   only:
   - master
-  - develop
 skip_tags: true
 image: Visual Studio 2017 Preview
 build_script:
