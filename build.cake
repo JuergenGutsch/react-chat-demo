@@ -1,11 +1,5 @@
 #addin nuget:?package=Cake.Kudu.Client
 
-/*
-$env:KUDU_CLIENT_BASEURI_APP = "https://cake-demo.scm.azurewebsites.net:443"
-$env:KUDU_CLIENT_USERNAME_APP = "`$cake-demo"
-$env:KUDU_CLIENT_PASSWORD_APP = ""
-*/ 
-
 string  baseUriApp     = EnvironmentVariable("KUDU_CLIENT_BASEURI_APP"),
         userNameApp    = EnvironmentVariable("KUDU_CLIENT_USERNAME_APP"),
 		    passwordApp    = EnvironmentVariable("KUDU_CLIENT_PASSWORD_APP"),
@@ -100,7 +94,7 @@ Task("Deploy")
 	});
 
 Task("Default")
-	.IsDependentOn("Publish")
+	.IsDependentOn("Deploy")
   .Does(() =>
   {
     Information("Your build is done :-)");
