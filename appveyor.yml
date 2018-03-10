@@ -18,5 +18,3 @@ install:
   #write out version
   - node --version
   - npm --version
-  # install modules
-  - npm install
